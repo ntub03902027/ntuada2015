@@ -14,9 +14,13 @@ bool compare(int a, int b) {
 	if (ans < 0)
 		ans += p;
 	while (power > 0) {
-		if (power % 2 == 0) {
-			power /= 2;
-			base = (base * base) % p;
+		if (power % 3 == 0) {
+			power /= 3;
+			base = (base * base * base) % p;
+		}
+		else if (power % 3 == 2){
+			ans = (ans * base * base) % p;
+			power -= 2;
 		}
 		else {
 			ans = (ans * base) % p;
