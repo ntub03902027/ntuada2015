@@ -4,7 +4,7 @@
 
 using namespace std;
 
-bool beat(int a, int b, int &c, int &e, int &p) {
+bool beat(int a, int b, int &c, long long int &e, int &p) {
 	long long int ans = (c * (a - b)) % p;
 	long long int power = e;
 	long long int base = a + b;
@@ -32,7 +32,7 @@ bool compare(int a, int b, int &c, int &e, int &p) {
 	return (a > b);
 }
 
-void merge_sort(std::vector<int> &queue, int &c, int &e, int &p) {
+void merge_sort(std::vector<int> &queue, int &c, long long int &e, int &p) {
 	if (queue.size() <= 1)
 		return;
 	std::vector<int> subqueue1;
@@ -65,8 +65,9 @@ int main(void) {
 	scanf("%d", &T);
 	std::vector<int> queue;
 	while (T--) {
-		int n, c, e, p;
-		scanf("%d%d%d%d", &n, &c, &e, &p);
+		long long int e;
+		int n, c, p;
+		scanf("%d%d%lld%d", &n, &c, &e, &p);
 		for (int i = 0; i < n; i++)
 			queue.push_back(i + 1);
 		merge_sort(queue, c, e, p);
