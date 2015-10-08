@@ -46,6 +46,39 @@ void merge_sort(int *queue, int size) {
 	merge_sort(subqueue1, size1);
 	merge_sort(subqueue2, size2);
 
+
+	for (int i = 0, it1 = 0, it2 = 0; i < size; i++) {
+		if (it2 < size2 && compare(subqueue1[size1 - 1], subqueue2[it2])) {
+			for (; it1 < size1; i++, it1++)
+				queue[i] = subqueue1[it1];
+			for (; it2 < size2; i++, it2++)
+				queue[i] = subqueue2[it2];
+			free(subqueue1);
+			free(subqueue2);
+			return;
+		}
+		else if (it1 < size1 && compare(subqueue2[size2 - 1], subqueue1[it1])) {
+			for (; it2 < size2; i++, it2++)
+				queue[i] = subqueue2[it2];
+			for (; it1 < size1; i++, it1++)
+				queue[i] = subqueue1[it1];
+			free(subqueue1);
+			free(subqueue2);
+			return;
+		}
+		else {
+			if (compare(subqueue1[it1], subqueue2[it2])) {
+				queue[i] = subqueue1[it1];
+				it1++;
+			}
+			else {
+				queue[i] = subqueue2[it2];
+				it2++;
+			}
+		}
+	}
+
+/*
 	if (compare(subqueue1[size1 - 1], subqueue2[0])) {
 		for (int i = 0; i < size1; i++)
 			queue[i] = subqueue1[i];
@@ -73,7 +106,7 @@ void merge_sort(int *queue, int size) {
 		}
 	}
 	free(subqueue1);
-	free(subqueue2);
+	free(subqueue2);*/
 	
 	/*printf("///\n");
 	for (int i = 0; i < size; i++)
