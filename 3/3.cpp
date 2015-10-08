@@ -12,12 +12,11 @@ int compare(const void *a, const void *b) {
 	long long int base = r + s;
 	if (ans < 0)
 		ans += p;
+
+	power = power % (p - 1);
+
 	while (power > 0) {
-		if (power % 3 == 0) {
-			power /= 3;
-			base = (((base * base) % p) * base) % p;
-		}
-		else if (power % 2 == 0) {
+		if (power % 2 == 0) {
 			power /= 2;
 			base = (base * base) % p;
 		}
@@ -28,7 +27,7 @@ int compare(const void *a, const void *b) {
 	}
 
 	if (ans > p / 2)
-		return 0;
+		return -1;
 	else
 		return 1;
 }
