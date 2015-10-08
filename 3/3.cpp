@@ -35,12 +35,12 @@ int main(void) {
 	int queue[200000];
 	while (T--) {
 		scanf("%d%d%lld%d", &n, &c, &e, &p);
-		int i;
-		for (i = 0; i < n; i++)
+		
+		for (int i = 0; i < n; i++)
 			queue[i] = i + 1;
 		qsort(queue, n, sizeof(int), compare);
 
-		for (i = 0; i < n; i++)
+		for (int i = 0; i < n; i++)
 			printf("%d ", queue[i]);
 		printf("\n");
 	}
