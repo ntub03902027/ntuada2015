@@ -1,13 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-long long int e;
-int n, c, p;
+long long int c, e, p;
+int n;
 
 int compare(const void *a, const void *b) {
 	int r = *(int *)a;
 	int s = *(int *)b;
-	long long int ans = (c * (r - s)) % (long long int)p;
+	long long int ans = (c * (r - s)) % p;
 	long long int power = e;
 	long long int base = r + s;
 	if (ans < 0)
@@ -15,10 +15,10 @@ int compare(const void *a, const void *b) {
 	while (power > 0) {
 		if (power % 2 == 0) {
 			power /= 2;
-			base = (base * base) % (long long int)p;
+			base = (base * base) % p;
 		}
 		else {
-			ans = (ans * base) % (long long int)p;
+			ans = (ans * base) % p;
 			power--;
 		}
 	}
@@ -34,7 +34,7 @@ int main(void) {
 	scanf("%d", &T);
 	int queue[200000];
 	while (T--) {
-		scanf("%d%d%lld%d", &n, &c, &e, &p);
+		scanf("%d%lld%lld%lld", &n, &c, &e, &p);
 		
 		for (int i = 0; i < n; i++)
 			queue[i] = i + 1;
