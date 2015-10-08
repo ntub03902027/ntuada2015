@@ -13,7 +13,11 @@ int compare(const void *a, const void *b) {
 	if (ans < 0)
 		ans += p;
 	while (power > 0) {
-		if (power % 2 == 0) {
+		if (power % 3 == 0) {
+			power /= 3;
+			base = (((base * base) % p) * base) % p;
+		}
+		else if (power % 2 == 0) {
 			power /= 2;
 			base = (base * base) % p;
 		}
