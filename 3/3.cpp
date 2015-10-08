@@ -16,14 +16,12 @@ int compare(const void *a, const void *b) {
 	power = power % (p - 1);
 
 	while (power > 0) {
-		if (power % 2 == 0) {
-			power /= 2;
-			base = (base * base) % p;
-		}
-		else {
+		if (power % 2 == 1) {
 			ans = (ans * base) % p;
-			power--;
+			power--;		
 		}
+		power /= 2;
+		base = (base * base) % p;
 	}
 
 	if (ans > p / 2)
