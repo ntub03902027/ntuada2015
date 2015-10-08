@@ -16,10 +16,10 @@ bool compare(int a, int b) {
 	while (power > 0) {
 		if (power % 2 == 0) {
 			power /= 2;
-			base = (base * base) % p;
+			base = (base * base) % (long long int)p;
 		}
 		else {
-			ans = (ans * base) % p;
+			ans = (ans * base) % (long long int)p;
 			power--;
 		}
 	}
