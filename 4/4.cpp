@@ -1,5 +1,7 @@
 #include <cstdio>
 
+
+#define DPL 1
 using namespace std;
 
 const int mod7cycle[10][6] = {
@@ -15,6 +17,7 @@ const int mod7cycle[10][6] = {
 	{3, 2, 6, 4, 5, 1}
 };
 
+
 typedef struct value {
 	long long num_count;
 	bool visited = false;
@@ -25,8 +28,12 @@ typedef struct attribute {
 	int digit[20];
 } Attribute;
 
-Value table[19][7][19][19];
 
+#ifdef DPL
+long long table_l[19][7][19][19];
+#else
+Value table[19][7][19][19];
+#endif
 
 Attribute seek_number(long long num) {
 	Attribute result;
@@ -66,31 +73,67 @@ bool istenpower(Attribute prop) {
 	return true;
 }
 
+#ifdef DPL
 void init_table_l(void) {
+
+	for (int b = 0; b < 7; b++)
+		for (int c = 0; c < 19; c++)
+			for (int d = 0; d < 19; d++) {
+
+				if (c > 1 || d > 1)
+					table_l[1][b][c][d] = 0;
+				else if (c == 1) {
+					if (b == 0 && d == 0)
+						table_l[1][b][c][d] = 1; //7
+					else
+						table_l[1][b][c][d] = 0;
+				}
+				else if (d == 1) {
+					if (b == 4 && c == 0)
+						table_l[1][b][c][d] = 1; //4
+					else
+						table_l[1][b][c][d] = 0;
+				}
+				else {
+					if (b == 1 || b == 2)
+						table_l[1][b][c][d] = 2; //1, 8 ; 2, 9
+					else if ( b == 4)
+						table_l[1][b][c][d] = 0; //4
+					else {
+						table_l[1][b][c][d] = 1; //0, 3, 5, 6
+					}
+				}
+			}
+
+
 	for (int a = 2; a < 19; a++)
 		for (int b = 0; b < 7; b++)
 			for (int c = 0; c < 19; c++)
 				for (int d = 0; d < 19; d++) {
-					table[a][b][c][d].num_count = 
-					table[a - 1][(b - mod7cycle[0][a % 6] + 7) % 7][c][d].num_count +
-					table[a - 1][(b - mod7cycle[1][a % 6] + 7) % 7][c][d].num_count * 2 + 
-					table[a - 1][(b - mod7cycle[2][a % 6] + 7) % 7][c][d].num_count * 2 + 
-					table[a - 1][(b - mod7cycle[3][a % 6] + 7) % 7][c][d].num_count + 
-					table[a - 1][(b - mod7cycle[5][a % 6] + 7) % 7][c][d].num_count + 
-					table[a - 1][(b - mod7cycle[6][a % 6] + 7) % 7][c][d].num_count;
+					table_l[a][b][c][d] = 
+					table_l[a - 1][(b - mod7cycle[0][a % 6] + 7) % 7][c][d] +
+					table_l[a - 1][(b - mod7cycle[1][a % 6] + 7) % 7][c][d] * 2 + 
+					table_l[a - 1][(b - mod7cycle[2][a % 6] + 7) % 7][c][d] * 2 + 
+					table_l[a - 1][(b - mod7cycle[3][a % 6] + 7) % 7][c][d] + 
+					table_l[a - 1][(b - mod7cycle[5][a % 6] + 7) % 7][c][d] + 
+					table_l[a - 1][(b - mod7cycle[6][a % 6] + 7) % 7][c][d];
 					if (c > 0)
-						table[a][b][c][d].num_count += table[a - 1][(b - mod7cycle[7][a % 6] + 7) % 7][c - 1][d].num_count;
+						table_l[a][b][c][d] += table_l[a - 1][(b - mod7cycle[7][a % 6] + 7) % 7][c - 1][d];
 					if (d > 0)
-						table[a][b][c][d].num_count += table[a - 1][(b - mod7cycle[4][a % 6] + 7) % 7][c][d - 1].num_count;
+						table_l[a][b][c][d] += table_l[a - 1][(b - mod7cycle[4][a % 6] + 7) % 7][c][d - 1];
 				}
 }
 
+long long dpl(int digit, int mod7, int count7, int count4) {
+	return table_l[digit][mod7][count7][count4];
+}
+#else
 void init_table(void) {
 	for (int b = 0; b < 7; b++)
 		for (int c = 0; c < 19; c++)
 			for (int d = 0; d < 19; d++) {
-				table[0][b][c][d].visited = true;
-				table[0][b][c][d].num_count = 0;
+				/*table[0][b][c][d].visited = true;
+				table[0][b][c][d].num_count = 0;*/
 
 				table[1][b][c][d].visited = true;
 				if (c > 1 || d > 1)
@@ -122,9 +165,7 @@ void init_table(void) {
 	//init_table_l();
 }
 
-long long dpl(int digit, int mod7, int count7, int count4) {
-	return table[digit][mod7][count7][count4].num_count;
-}
+
 
 long long dp(int digit, int mod7, int count7, int count4) {
 	if (digit == 0 || count7 < 0 || count4 < 0) {
@@ -151,7 +192,7 @@ long long dp(int digit, int mod7, int count7, int count4) {
 		return table[digit][mod7][count7][count4].num_count;
 	}
 }
-
+#endif
 
 long long find_lucky(int digit, int mod7, int current7, int diff) {
 	if (digit == 0) {
@@ -171,7 +212,12 @@ long long find_lucky(int digit, int mod7, int current7, int diff) {
 				continue;
 			else {
 				//printf("add: (%d, %d ,%d ,%d) = %lld\n", digit, mod7, count7, count4, dp(digit, mod7, count7, count4));
+#ifdef DPL
+				count += dpl(digit, mod7, count7, count4);
+#else
 				count += dp(digit, mod7, count7, count4);
+#endif
+				//count += dpl(digit, mod7, count7, count4);
 				//count += table[digit][mod7][count7][count4].num_count;
 			}
 		}
@@ -267,7 +313,13 @@ bool belong(int num, int digit, int mod, int q7, int q4) {
 
 int main(void) {
 	
+#ifdef DPL
+	init_table_l();
+#else
 	init_table();
+#endif
+
+	//init_table();
 	int T;
 	long long l;
 	long long r;
