@@ -35,6 +35,11 @@ long long table_l[19][7][19][19];
 Value table[19][7][19][19];
 #endif
 
+
+inline int min(int a, int b) {
+	return (a < b)? a : b;
+}
+
 Attribute seek_number(long long num) {
 	Attribute result;
 
@@ -207,10 +212,10 @@ long long find_lucky(int digit, int mod7, int current7, int diff) {
 		count7 = 3 - current7;
 	else count7 = 0;
 	for (; count7 <= digit; count7++)  {
-		for (int count4 = digit - count7; count4 >= 0; count4--) {
-			if (diff + count7 - count4 <= 0)
+		for (int count4 = min(digit - count7, diff + count7 - 1); count4 >= 0; count4--) {
+			/*if (diff + count7 - count4 <= 0)
 				continue;
-			else {
+			else {*/
 				//printf("add: (%d, %d ,%d ,%d) = %lld\n", digit, mod7, count7, count4, dp(digit, mod7, count7, count4));
 #ifdef DPL
 				count += dpl(digit, mod7, count7, count4);
@@ -219,7 +224,7 @@ long long find_lucky(int digit, int mod7, int current7, int diff) {
 #endif
 				//count += dpl(digit, mod7, count7, count4);
 				//count += table[digit][mod7][count7][count4].num_count;
-			}
+			/*}*/
 		}
 	}
 	//printf("(%d, %d ,%d ,%d) = %lld\n", digit, mod7, current7, diff, count);
