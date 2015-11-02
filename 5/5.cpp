@@ -74,10 +74,12 @@ void fill(std::vector<type> &current, std::vector<type> last, int c) {
 			if (temp >= 9 - current[k]) {
 				temp -= (9 - current[k]);
 				current[k] = 9;
+				k++;
 			}
 			else {
 				current[k] += temp;
 				temp = 0;
+				k++;
 			}
 		}
 	}
