@@ -117,12 +117,14 @@ Pair find_non_MUST(Data set[], const int vertex1, const int vertex2, const int w
 		if (set[i].weight == weight) {
 			result.edges++;
 			result.weight += set[i].weight;
+			set[i].weight = 0;
 		}
 		i = set[i].next;
 	}
-	if (set[i].weight == weight) {
+	if (abs(set[i].weight) == weight) {
 		result.edges++;
 		result.weight += set[i].weight;
+		set[i].weight = 0;
 	}
 	//printf("non-MUST: %d %d\n", result.edges, result.weight);
 	return result;
